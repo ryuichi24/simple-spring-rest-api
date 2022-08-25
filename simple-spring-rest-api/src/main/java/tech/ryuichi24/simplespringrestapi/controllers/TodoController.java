@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RequestMapping(path = TodoController.BASE_URL)
 @RestController
@@ -32,22 +34,39 @@ public class TodoController {
     @RequestMapping(method = RequestMethod.GET, path = "/{id}")
     public ResponseEntity<String> getTodoItem(@PathVariable int id) {
         int targetIndex = id - 1;
+        if((this._todoItems.size() - 1) < targetIndex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
+        }
+
         return ResponseEntity.ok(this._todoItems.get(targetIndex));
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "")
     public ResponseEntity<String> createTodoItem(@RequestBody Map<String, Object> newTodoItem) {
         String newTodoItemTitle = (String) newTodoItem.get("title");
+        if(newTodoItemTitle == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Title must not be blank.");
+        }
+
+        this._todoItems.add(newTodoItemTitle);
         return ResponseEntity.ok(newTodoItemTitle);
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/{id}")
-    public ResponseEntity<?> updateTodoItem(@PathVariable int id) {
+    public ResponseEntity<?> updateTodoItem(@PathVariable int id, @RequestBody Map<String, Object> newTodoItem) {
+        String newTodoItemTitle = (String) newTodoItem.get("title");
+        if(newTodoItemTitle == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Title must not be blank.");
+        }
+
+        this._todoItems.remove(id - 1);
+        this._todoItems.add(newTodoItemTitle);
         return ResponseEntity.noContent().build();
     }
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/{id}")
     public ResponseEntity<String> removeTodoItem(@PathVariable int id) {
+        this._todoItems.remove(id - 1);
         return ResponseEntity.noContent().build();
     }
 }
