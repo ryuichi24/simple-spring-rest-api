@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   workspace:
-    container_name: java-workspace
+    container_name: ${PROJECT_NAME:-default}-workspace
     build:
       context: ./docker/workspace
       args:
