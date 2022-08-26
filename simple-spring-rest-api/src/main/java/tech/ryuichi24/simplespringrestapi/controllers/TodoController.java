@@ -1,5 +1,6 @@
 package tech.ryuichi24.simplespringrestapi.controllers;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import tech.ryuichi24.simplespringrestapi.models.TodoItem;
 
@@ -51,7 +53,9 @@ public class TodoController {
 
         newTodoItem.setId(_counter.incrementAndGet());
         _todoItems.add(newTodoItem);
-        return ResponseEntity.ok(newTodoItem);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(newTodoItem.getId()).toUri();
+        return ResponseEntity.created(location).body(newTodoItem);
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/{id}")
