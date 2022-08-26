@@ -65,9 +65,8 @@ public class TodoController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
         }
 
-        int indexOfFoundItem = _todoItems.indexOf(found);
-        found.setTitle(newTodoItem.getTitle());
-        _todoItems.set(indexOfFoundItem, found);
+        _todoItems.remove(found);
+        _todoItems.add(newTodoItem);
 
         return ResponseEntity.noContent().build();
     }
