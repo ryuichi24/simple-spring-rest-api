@@ -73,7 +73,7 @@ public class TodoController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/{id}")
-    public ResponseEntity<String> removeTodoItem(@PathVariable int id) {
+    public ResponseEntity<?> removeTodoItem(@PathVariable int id) {
         TodoItem found = _findTodoItemById(id);
         if (found == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
