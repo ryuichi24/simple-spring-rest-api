@@ -2,7 +2,7 @@ package tech.ryuichi24.simplespringrestapi.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,60 +13,72 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import tech.ryuichi24.simplespringrestapi.models.TodoItem;
+
 @RequestMapping(path = TodoController.BASE_URL)
 @RestController
 public class TodoController {
     public static final String BASE_URL = "/api/v1/todos";
-
-    private final List<String> _todoItems = new ArrayList<>() {
+    private final AtomicInteger _counter = new AtomicInteger();
+    private final List<TodoItem> _todoItems = new ArrayList<>() {
         {
-            add("todo 1");
-            add("todo 2");
-            add("todo 3");
+            add(new TodoItem(_counter.incrementAndGet(), "todo 1"));
+            add(new TodoItem(_counter.incrementAndGet(), "todo 2"));
+            add(new TodoItem(_counter.incrementAndGet(), "todo 3"));
         }
     };
 
     @RequestMapping(method = RequestMethod.GET, path = "")
-    public ResponseEntity<List<String>> getTodoItems() {
-        return ResponseEntity.ok(this._todoItems);
+    public ResponseEntity<List<TodoItem>> getTodoItems() {
+        return ResponseEntity.ok(_todoItems);
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{id}")
-    public ResponseEntity<String> getTodoItem(@PathVariable int id) {
-        int targetIndex = id - 1;
-        if((this._todoItems.size() - 1) < targetIndex) {
+    public ResponseEntity<TodoItem> getTodoItem(@PathVariable int id) {
+        TodoItem found = _findTodoItemById(id);
+        if (found == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
         }
 
-        return ResponseEntity.ok(this._todoItems.get(targetIndex));
+        return ResponseEntity.ok(found);
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "")
-    public ResponseEntity<String> createTodoItem(@RequestBody Map<String, Object> newTodoItem) {
-        String newTodoItemTitle = (String) newTodoItem.get("title");
-        if(newTodoItemTitle == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Title must not be blank.");
+    public ResponseEntity<TodoItem> createTodoItem(@RequestBody TodoItem newTodoItem) {
+        if (newTodoItem == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Todo item must not be null.");
         }
 
-        this._todoItems.add(newTodoItemTitle);
-        return ResponseEntity.ok(newTodoItemTitle);
+        newTodoItem.setId(_counter.incrementAndGet());
+        _todoItems.add(newTodoItem);
+        return ResponseEntity.ok(newTodoItem);
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/{id}")
-    public ResponseEntity<?> updateTodoItem(@PathVariable int id, @RequestBody Map<String, Object> newTodoItem) {
-        String newTodoItemTitle = (String) newTodoItem.get("title");
-        if(newTodoItemTitle == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Title must not be blank.");
+    public ResponseEntity<?> updateTodoItem(@PathVariable int id, @RequestBody TodoItem newTodoItem) {
+        TodoItem found = _findTodoItemById(id);
+        if (found == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
         }
 
-        this._todoItems.remove(id - 1);
-        this._todoItems.add(newTodoItemTitle);
+        int indexOfFoundItem = _todoItems.indexOf(found);
+        found.setTitle(newTodoItem.getTitle());
+        _todoItems.set(indexOfFoundItem, found);
+
         return ResponseEntity.noContent().build();
     }
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/{id}")
     public ResponseEntity<String> removeTodoItem(@PathVariable int id) {
-        this._todoItems.remove(id - 1);
+        TodoItem found = _findTodoItemById(id);
+        if (found == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
+        }
+        _todoItems.remove(found);
         return ResponseEntity.noContent().build();
+    }
+
+    private TodoItem _findTodoItemById(int id) {
+        return _todoItems.stream().filter(item -> item.getId() == id).findAny().orElse(null);
     }
 }
