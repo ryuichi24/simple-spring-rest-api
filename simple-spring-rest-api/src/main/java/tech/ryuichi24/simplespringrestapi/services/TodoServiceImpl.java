@@ -43,9 +43,6 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public TodoItem getTodoItemById(int id) {
         TodoItem found = _findTodoItemById(id);
-        if (Objects.isNull(found)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
-        }
 
         return found;
     }
@@ -53,18 +50,13 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public void removeTodoItemById(int id) {
         TodoItem found = _findTodoItemById(id);
-        if (Objects.isNull(found)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
-        }
+
         _todoItems.remove(found);
     }
 
     @Override
     public TodoItem updateTodoItem(int id, TodoItem todoItem) {
         TodoItem found = _findTodoItemById(id);
-        if (found == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
-        }
 
         _todoItems.remove(found);
         _todoItems.add(todoItem);
@@ -73,7 +65,12 @@ public class TodoServiceImpl implements TodoService {
     }
 
     private TodoItem _findTodoItemById(int id) {
-        return _todoItems.stream().filter(item -> item.getId() == id).findAny().orElse(null);
+        TodoItem found = _todoItems.stream().filter(item -> item.getId() == id).findAny().orElse(null);
+        if (Objects.isNull(found)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
+        }
+
+        return found;
     }
 
 }
