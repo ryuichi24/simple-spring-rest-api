@@ -43,7 +43,6 @@ public class TodoController {
         TodoItem savedTodoItem = _todoService.saveTodoItem(newTodoItem);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(savedTodoItem.getId()).toUri();
-
         return ResponseEntity.created(location).body(savedTodoItem);
     }
 

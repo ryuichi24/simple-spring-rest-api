@@ -14,7 +14,6 @@ import tech.ryuichi24.simplespringrestapi.models.TodoItem;
 @Service
 public class TodoServiceImpl implements TodoService {
     private final AtomicInteger _counter = new AtomicInteger();
-
     private final List<TodoItem> _todoItems = new ArrayList<>() {
         {
             add(new TodoItem(_counter.incrementAndGet(), "todo 1"));
@@ -28,10 +27,8 @@ public class TodoServiceImpl implements TodoService {
         if (Objects.isNull(todoItem)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Todo item must not be null.");
         }
-
         todoItem.setId(_counter.incrementAndGet());
         _todoItems.add(todoItem);
-
         return todoItem;
     }
 
@@ -43,24 +40,20 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public TodoItem getTodoItemById(int id) {
         TodoItem found = _findTodoItemById(id);
-
         return found;
     }
 
     @Override
     public void removeTodoItemById(int id) {
         TodoItem found = _findTodoItemById(id);
-
         _todoItems.remove(found);
     }
 
     @Override
     public TodoItem updateTodoItem(int id, TodoItem todoItem) {
         TodoItem found = _findTodoItemById(id);
-
         _todoItems.remove(found);
         _todoItems.add(todoItem);
-
         return todoItem;
     }
 
@@ -69,8 +62,6 @@ public class TodoServiceImpl implements TodoService {
         if (Objects.isNull(found)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
         }
-
         return found;
     }
-
 }
