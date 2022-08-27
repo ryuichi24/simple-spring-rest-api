@@ -40,8 +40,7 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public TodoItem getTodoItemById(int id) {
-        TodoItem found = _findTodoItemById(id);
-        return found;
+        return _findTodoItemById(id);
     }
 
     @Override
