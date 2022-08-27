@@ -3,6 +3,7 @@ package tech.ryuichi24.simplespringrestapi.services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.http.HttpStatus;
@@ -58,10 +59,10 @@ public class TodoServiceImpl implements TodoService {
     }
 
     private TodoItem _findTodoItemById(int id) {
-        TodoItem found = _todoItems.stream().filter(item -> item.getId() == id).findAny().orElse(null);
-        if (Objects.isNull(found)) {
+        Optional<TodoItem> found = _todoItems.stream().filter(item -> item.getId() == id).findAny();
+        if (found.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
         }
-        return found;
+        return found.get();
     }
 }
