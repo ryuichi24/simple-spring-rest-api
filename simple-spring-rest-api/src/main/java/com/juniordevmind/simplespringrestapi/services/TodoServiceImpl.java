@@ -1,4 +1,4 @@
-package tech.ryuichi24.simplespringrestapi.services;
+package com.juniordevmind.simplespringrestapi.services;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import tech.ryuichi24.simplespringrestapi.models.TodoItem;
+import com.juniordevmind.simplespringrestapi.models.TodoItem;
 
 @Service
 public class TodoServiceImpl implements TodoService {
