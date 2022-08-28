@@ -15,17 +15,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(value = { NotFoundException.class })
-    protected ResponseEntity<Object> handleNotFoundException(RuntimeException ex, WebRequest request) {
-        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
-        return this.handleExceptionInternal(ex, errorResponse, new HttpHeaders(), HttpStatus.NOT_FOUND,
-                request);
-    }
-
-    @ExceptionHandler(value = { BadRequestException.class })
-    protected ResponseEntity<Object> handleBadRequestException(RuntimeException ex, WebRequest request) {
-        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
-        return this.handleExceptionInternal(ex, errorResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST,
+    @ExceptionHandler(value = { NotFoundException.class, BadRequestException.class })
+    protected ResponseEntity<Object> handleHttpException(HttpException ex, WebRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(), ex.getHttpStatus());
+        return this.handleExceptionInternal(ex, errorResponse, new HttpHeaders(), ex.getHttpStatus(),
                 request);
     }
 
@@ -36,8 +29,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
         String fieldError = fieldErrors.get(0).getDefaultMessage();
         ErrorResponse errorResponse = new ErrorResponse(fieldError, HttpStatus.BAD_REQUEST);
-        return this.handleExceptionInternal(ex, errorResponse, headers, HttpStatus.BAD_REQUEST,
-                request);
+        return this.handleExceptionInternal(ex, errorResponse, headers, HttpStatus.BAD_REQUEST, request);
     }
 
 }
