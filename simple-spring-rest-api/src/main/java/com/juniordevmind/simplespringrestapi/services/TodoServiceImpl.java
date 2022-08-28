@@ -1,4 +1,4 @@
-package tech.ryuichi24.simplespringrestapi.services;
+package com.juniordevmind.simplespringrestapi.services;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,9 +8,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.stereotype.Service;
 
-import tech.ryuichi24.simplespringrestapi.errors.BadRequestException;
-import tech.ryuichi24.simplespringrestapi.errors.NotFoundException;
-import tech.ryuichi24.simplespringrestapi.models.TodoItem;
+import com.juniordevmind.simplespringrestapi.errors.BadRequestException;
+import com.juniordevmind.simplespringrestapi.errors.NotFoundException;
+import com.juniordevmind.simplespringrestapi.models.TodoItem;
 
 @Service
 public class TodoServiceImpl implements TodoService {
