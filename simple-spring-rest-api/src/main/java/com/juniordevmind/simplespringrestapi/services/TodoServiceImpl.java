@@ -2,7 +2,6 @@ package com.juniordevmind.simplespringrestapi.services;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -25,9 +24,6 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public TodoItem saveTodoItem(TodoItem todoItem) throws BadRequestException {
-        if (Objects.isNull(todoItem.getTitle())) {
-            throw new BadRequestException("Title must not be null.");
-        }
         todoItem.setId(_counter.incrementAndGet());
         _todoItems.add(todoItem);
         return todoItem;

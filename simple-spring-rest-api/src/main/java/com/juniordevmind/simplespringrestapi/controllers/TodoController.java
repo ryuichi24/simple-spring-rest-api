@@ -3,6 +3,8 @@ package com.juniordevmind.simplespringrestapi.controllers;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,7 +41,7 @@ public class TodoController {
     }
 
     @PostMapping(path = "")
-    public ResponseEntity<TodoItem> createTodoItem(@RequestBody TodoItem newTodoItem) {
+    public ResponseEntity<TodoItem> createTodoItem(@Valid @RequestBody TodoItem newTodoItem) {
         TodoItem savedTodoItem = _todoService.saveTodoItem(newTodoItem);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(savedTodoItem.getId()).toUri();
@@ -47,7 +49,7 @@ public class TodoController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<?> updateTodoItem(@PathVariable int id, @RequestBody TodoItem newTodoItem) {
+    public ResponseEntity<?> updateTodoItem(@PathVariable int id, @Valid @RequestBody TodoItem newTodoItem) {
         _todoService.updateTodoItem(id, newTodoItem);
         return ResponseEntity.noContent().build();
     }

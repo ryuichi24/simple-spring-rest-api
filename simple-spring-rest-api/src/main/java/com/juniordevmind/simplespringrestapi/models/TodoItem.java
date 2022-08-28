@@ -1,7 +1,10 @@
 package com.juniordevmind.simplespringrestapi.models;
 
+import javax.validation.constraints.NotBlank;
+
 public class TodoItem {
     private int id;
+    @NotBlank(message = "Title must not be blank.")
     private String title;
 
     public TodoItem() {
