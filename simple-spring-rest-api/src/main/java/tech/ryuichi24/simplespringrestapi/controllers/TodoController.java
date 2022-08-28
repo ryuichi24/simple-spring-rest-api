@@ -3,6 +3,8 @@ package tech.ryuichi24.simplespringrestapi.controllers;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.http.HttpStatus;
@@ -38,19 +40,14 @@ public class TodoController {
     @RequestMapping(method = RequestMethod.GET, path = "/{id}")
     public ResponseEntity<TodoItem> getTodoItem(@PathVariable int id) {
         TodoItem found = _findTodoItemById(id);
-        if (found == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
-        }
-
         return ResponseEntity.ok(found);
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "")
     public ResponseEntity<TodoItem> createTodoItem(@RequestBody TodoItem newTodoItem) {
-        if (newTodoItem == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Todo item must not be null.");
+        if (Objects.isNull(newTodoItem.getTitle())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Title must not be null.");
         }
-
         newTodoItem.setId(_counter.incrementAndGet());
         _todoItems.add(newTodoItem);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
@@ -61,27 +58,23 @@ public class TodoController {
     @RequestMapping(method = RequestMethod.PUT, path = "/{id}")
     public ResponseEntity<?> updateTodoItem(@PathVariable int id, @RequestBody TodoItem newTodoItem) {
         TodoItem found = _findTodoItemById(id);
-        if (found == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
-        }
-
         _todoItems.remove(found);
         _todoItems.add(newTodoItem);
-
         return ResponseEntity.noContent().build();
     }
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/{id}")
     public ResponseEntity<?> removeTodoItem(@PathVariable int id) {
         TodoItem found = _findTodoItemById(id);
-        if (found == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
-        }
         _todoItems.remove(found);
         return ResponseEntity.noContent().build();
     }
 
     private TodoItem _findTodoItemById(int id) {
-        return _todoItems.stream().filter(item -> item.getId() == id).findAny().orElse(null);
+        Optional<TodoItem> found = _todoItems.stream().filter(item -> item.getId() == id).findAny();
+        if (!found.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
+        }
+        return found.get();
     }
 }
