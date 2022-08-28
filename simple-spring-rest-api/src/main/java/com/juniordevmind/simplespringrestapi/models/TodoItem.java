@@ -1,4 +1,4 @@
-package tech.ryuichi24.simplespringrestapi.models;
+package com.juniordevmind.simplespringrestapi.models;
 
 public class TodoItem {
     private int id;
