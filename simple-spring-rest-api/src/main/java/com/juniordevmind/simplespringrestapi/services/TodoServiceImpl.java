@@ -59,7 +59,7 @@ public class TodoServiceImpl implements TodoService {
 
     private TodoItem _findTodoItemById(int id) {
         Optional<TodoItem> found = _todoItems.stream().filter(item -> item.getId() == id).findAny();
-        if (found.isPresent()) {
+        if (!found.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
         }
         return found.get();
