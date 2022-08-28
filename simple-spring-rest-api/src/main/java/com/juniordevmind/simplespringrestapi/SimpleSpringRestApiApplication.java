@@ -1,4 +1,4 @@
-package tech.ryuichi24.simplespringrestapi;
+package com.juniordevmind.simplespringrestapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

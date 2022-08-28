@@ -1,4 +1,4 @@
-package tech.ryuichi24.simplespringrestapi.errors;
+package com.juniordevmind.simplespringrestapi.errors;
 
 public class NotFoundException extends RuntimeException {
 

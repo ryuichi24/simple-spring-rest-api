@@ -1,8 +1,8 @@
-package tech.ryuichi24.simplespringrestapi.services;
+package com.juniordevmind.simplespringrestapi.services;
 
 import java.util.List;
 
-import tech.ryuichi24.simplespringrestapi.models.TodoItem;
+import com.juniordevmind.simplespringrestapi.models.TodoItem;
 
 public interface TodoService {
     public TodoItem saveTodoItem(TodoItem todoItem);
