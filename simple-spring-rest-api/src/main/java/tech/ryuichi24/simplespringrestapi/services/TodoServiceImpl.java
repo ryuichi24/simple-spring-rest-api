@@ -25,8 +25,8 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public TodoItem saveTodoItem(TodoItem todoItem) {
-        if (Objects.isNull(todoItem)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Todo item must not be null.");
+        if (Objects.isNull(todoItem.getTitle())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Title must not be null.");
         }
         todoItem.setId(_counter.incrementAndGet());
         _todoItems.add(todoItem);
