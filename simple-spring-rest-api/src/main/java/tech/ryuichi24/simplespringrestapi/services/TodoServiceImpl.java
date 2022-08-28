@@ -24,7 +24,7 @@ public class TodoServiceImpl implements TodoService {
     };
 
     @Override
-    public TodoItem saveTodoItem(TodoItem todoItem) {
+    public TodoItem saveTodoItem(TodoItem todoItem) throws BadRequestException {
         if (Objects.isNull(todoItem.getTitle())) {
             throw new BadRequestException("Title must not be null.");
         }
@@ -57,7 +57,7 @@ public class TodoServiceImpl implements TodoService {
         return todoItem;
     }
 
-    private TodoItem _findTodoItemById(int id) {
+    private TodoItem _findTodoItemById(int id) throws NotFoundException {
         Optional<TodoItem> found = _todoItems.stream().filter(item -> item.getId() == id).findAny();
         if (!found.isPresent()) {
             throw new NotFoundException("The todo item is not available.");
