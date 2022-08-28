@@ -1,4 +1,4 @@
-package tech.ryuichi24.simplespringrestapi.controllers;
+package com.juniordevmind.simplespringrestapi.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import tech.ryuichi24.simplespringrestapi.models.TodoItem;
+import com.juniordevmind.simplespringrestapi.models.TodoItem;
 
 @RestController
 public class TodoController {
