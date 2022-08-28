@@ -6,10 +6,10 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
+import tech.ryuichi24.simplespringrestapi.errors.BadRequestException;
+import tech.ryuichi24.simplespringrestapi.errors.NotFoundException;
 import tech.ryuichi24.simplespringrestapi.models.TodoItem;
 
 @Service
@@ -25,8 +25,8 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public TodoItem saveTodoItem(TodoItem todoItem) {
-        if (Objects.isNull(todoItem)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Todo item must not be null.");
+        if (Objects.isNull(todoItem.getTitle())) {
+            throw new BadRequestException("Title must not be null.");
         }
         todoItem.setId(_counter.incrementAndGet());
         _todoItems.add(todoItem);
@@ -59,8 +59,8 @@ public class TodoServiceImpl implements TodoService {
 
     private TodoItem _findTodoItemById(int id) {
         Optional<TodoItem> found = _todoItems.stream().filter(item -> item.getId() == id).findAny();
-        if (found.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
+        if (!found.isPresent()) {
+            throw new NotFoundException("The todo item is not available.");
         }
         return found.get();
     }
