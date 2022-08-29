@@ -30,6 +30,9 @@ dependencies {
 	runtimeOnly 'com.h2database:h2:2.1.214'
 	implementation 'org.postgresql:postgresql:42.5.0'
 
+	// database migration
+	implementation 'org.flywaydb:flyway-core:8.5.13'
+
 	// swagger
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
 }

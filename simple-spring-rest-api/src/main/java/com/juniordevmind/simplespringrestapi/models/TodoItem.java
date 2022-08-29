@@ -23,7 +23,7 @@ public class TodoItem {
     @Column(name = "id", nullable = false)
     private int id;
 
-    @Column(name = "titles", nullable = false)
+    @Column(name = "title", nullable = false)
     @NotBlank(message = "Title must not be blank.")
     private String title;
 }
