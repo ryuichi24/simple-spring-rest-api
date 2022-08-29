@@ -25,3 +25,6 @@ replay_pid*
 
 .vscode
 .env
+.docker
+application*-prod.yml
+application*-stg.yml
