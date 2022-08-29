@@ -11,6 +11,7 @@
 		"vscjava.vscode-gradle",
 		"streetsidesoftware.code-spell-checker",
 		"esbenp.prettier-vscode",
-		"fosshaas.fontsize-shortcuts"
+		"fosshaas.fontsize-shortcuts",
+		"mtxr.sqltools"
 	]
   }
