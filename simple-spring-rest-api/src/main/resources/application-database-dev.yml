@@ -1,8 +1,10 @@
 spring:
+  flyway:
+    locations: classpath:/db/migration,classpath:/db/testdata
   jpa:
     database: POSTGRESQL
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
       show-sql: true
     properties:
       hibernate:
