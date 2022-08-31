@@ -11,6 +11,12 @@ services:
         USER_UID: ${USER_UID:-1000}
         USER_GID: ${USER_GID:-1000}
     tty: true
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-dev}
+      POSTGRES_HOST: ${POSTGRES_HOST:-postgres}
+      POSTGRES_PORT: ${POSTGRES_PORT:-5432}
     volumes:
       - ../:/home/${USERNAME:-vscode}/workspace:cached
     ports:
