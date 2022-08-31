@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "todos", schema = "business")
 public class TodoItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private int id;
 
