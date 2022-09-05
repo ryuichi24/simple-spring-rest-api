@@ -12,7 +12,7 @@ FROM openjdk:18.0
 
 RUN mkdir /app
 
-EXPOSE 5555
+EXPOSE 8080
 
 ENV SPRING_PROFILES_ACTIVE=prod
 
