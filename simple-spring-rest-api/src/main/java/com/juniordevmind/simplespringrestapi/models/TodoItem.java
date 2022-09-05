@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "todos", schema = "business")
+@Table(name = "todos")
 public class TodoItem {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
